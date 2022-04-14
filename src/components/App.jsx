@@ -119,7 +119,7 @@ const App = () => {
             className={`nes-btn ${correct === null ? 'is-disabled' : ''}`}
             onClick={handleNextRound}
           >
-            Play Again
+            Continue
           </button>
         </div>
       </div>
