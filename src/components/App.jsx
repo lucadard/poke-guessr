@@ -17,7 +17,7 @@ const App = () => {
   const fetchPokemon = async () => {
     setLoading(true);
     const res = await api.random();
-    console.log(res.name);
+    console.log('clue:', res.name);
     setPokemon(res);
     setLoading(false);
   };
@@ -53,7 +53,7 @@ const App = () => {
       <>
         <span className="nes-text is-error">Incorrect</span>
         <p>
-          'The Pokemon was{' '}
+          The Pokemon was{' '}
           <span style={{ textTransform: 'capitalize' }}>{pokemon.name}</span>!
         </p>
       </>
