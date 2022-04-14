@@ -25,6 +25,7 @@ const App = () => {
   const handleSubmit = event => {
     event.preventDefault();
     if (loading) return;
+    if (event.target.text.value === '') return;
     checkInput(event.target.text.value)
       ? (setScore(score + 1), setCorrect(true))
       : (setLosses(losses + 1), setCorrect(false));
@@ -32,8 +33,10 @@ const App = () => {
   };
 
   const checkInput = input => {
-    let re = new RegExp(`[${pokemon.name}]`, 'gi');
-    return re.test(input);
+    if (input.includes(' ')) input = input.replace(' ', '');
+    if (input.includes('.')) input = input.replace('.', '');
+    input = input.toLowerCase();
+    return input === pokemon.name;
   };
 
   const handleNextRound = event => {
@@ -49,7 +52,10 @@ const App = () => {
     ) : (
       <>
         <span className="nes-text is-error">Incorrect</span>
-        <span>{`The Pokemon was ${pokemon.name}!`}</span>
+        <p>
+          'The Pokemon was{' '}
+          <span style={{ textTransform: 'capitalize' }}>{pokemon.name}</span>!
+        </p>
       </>
     );
   };
