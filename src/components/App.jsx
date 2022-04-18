@@ -3,10 +3,24 @@ import { useState, useEffect } from 'react';
 import api from '../api';
 import './App.css';
 
+const useLocalStorage = (key, initialValue) => {
+  const [storedValue, setStoredValue] = useState(() => {
+    let item = window.localStorage.getItem(key);
+    return item ? JSON.parse(item) : initialValue;
+  });
+  const setValue = value => {
+    setStoredValue(value);
+    window.localStorage.setItem(key, JSON.stringify(value));
+  };
+  return [storedValue, setValue];
+};
+
 const App = () => {
   const [pokemon, setPokemon] = useState({});
-  const [score, setScore] = useState(0);
-  const [losses, setLosses] = useState(0);
+  const [score, setScore] = useLocalStorage('score', {
+    wins: 0,
+    losses: 0,
+  });
   const [correct, setCorrect] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -17,7 +31,7 @@ const App = () => {
   const fetchPokemon = async () => {
     setLoading(true);
     const res = await api.random();
-    console.log('clue:', res.name);
+    console.log('answer:', res.name);
     setPokemon(res);
     setLoading(false);
   };
@@ -27,8 +41,8 @@ const App = () => {
     if (loading) return;
     if (event.target.text.value === '') return;
     checkInput(event.target.text.value)
-      ? (setScore(score + 1), setCorrect(true))
-      : (setLosses(losses + 1), setCorrect(false));
+      ? (setScore({ ...score, wins: score.wins + 1 }), setCorrect(true))
+      : (setScore({ ...score, losses: score.losses + 1 }), setCorrect(false));
     event.target.text.value = '';
   };
 
@@ -110,8 +124,16 @@ const App = () => {
       </div>
       <div className="bottom-container">
         <div className="nes-container score-container">
-          <p>Wins: {score}</p>
-          <p>Losses: {losses}</p>
+          <div>
+            <p>Wins: {score.wins}</p>
+            <p>Losses: {score.losses}</p>
+          </div>
+          <button
+            className="nes-btn reset-button"
+            onClick={() => setScore({ wins: 0, losses: 0 })}
+          >
+            Reset
+          </button>
         </div>
         <div className="button-container">
           <button

@@ -36,9 +36,9 @@
 .score-container {
   width: 50%;
   padding: 0;
-  padding: .5rem 0 .5rem .5rem;
+  padding: 0.5rem 0 0.5rem 0.5rem;
   display: flex;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .score-container p {
@@ -58,6 +58,8 @@
   width: 100%;
   image-rendering: pixelated;
   transition: filter 500ms ease-in-out;
+  pointer-events: none;
+  user-select: none;
 }
 
 .pokemonImg.hide {
